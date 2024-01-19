@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:23.8.9.54
+    container_name: clickhouse-server
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+      - "9004:9004"
+    environment:
+      - CLICKHOUSE_USER=default
+      - CLICKHOUSE_PASSWORD=1234
+    volumes:
+      - ./clickhouse_data:/var/lib/clickhouse
+      - ./ddl/clickhouse.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: customer
+      MYSQL_USER: default
+      MYSQL_PASSWORD: 1234
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+      - ./ddl/mysql.sql:/docker-entrypoint-initdb.d/init.sql
+
+  soda-check-clickhouse:
+    image: sodadata/soda-core:latest
+    command: ["scan", "-d", "clickhouse_src", "-c", "/sodacl/configuration.yml", "/sodacl/checks.yml"]
+    volumes:
+      - ./soda/sample_1:/sodacl
+    depends_on:
+      - clickhouse
+
+  soda-check-mysql-to-clickhouse:
+    image: sodadata/soda-library:v1.2.0
+    command: ["scan", "-d", "clickhouse_src", "-c", "/sodacl/configuration.yml", "/sodacl/reconciliation.yml"]
+    volumes:
+      - ./soda/sample_2:/sodacl
+    depends_on:
+      - mysql
+      - clickhouse

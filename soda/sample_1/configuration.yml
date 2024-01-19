@@ -1,0 +1,15 @@
+data_source clickhouse_src:
+  type: mysql
+  host: clickhouse
+  port: "9004"
+  username: default
+  password: "1234"
+  database: customer
+
+data_source mysql_src:
+  type: mysql
+  host: mysql
+  port: "3306"
+  username: default
+  password: "1234"
+  database: customer

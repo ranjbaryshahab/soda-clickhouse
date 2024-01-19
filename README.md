@@ -12,6 +12,7 @@ For example, if you must migrate data from a MySQL data source to a ClickHouse d
 
 - Docker
 - Docker Compose
+- Before running, make sure to configure your Soda Cloud credentials. Open ./soda/sample_2/configuration.yml and add your_key and your_secret. its only need for sample_2.
 
 ## Quick Start
 

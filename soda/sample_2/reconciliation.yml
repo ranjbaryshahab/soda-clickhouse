@@ -1,0 +1,13 @@
+reconciliation dim_customer:
+  label: "Recon dim_customers"
+  datasets:
+    source:
+      dataset: dim_customer
+      datasource: mysql_src
+    target:
+      dataset: dim_customer
+      datasource: clickhouse_src
+  checks:
+    - row_count:
+        fail: when diff > 4
+        warn: when diff between 1 and 3

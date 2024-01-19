@@ -1,0 +1,6 @@
+checks for dim_customer:
+  - row_count between 10 and 1000
+  - missing_count(birth_date) = 0
+  - invalid_count(number_cars_owned) = 0:
+      valid min: 1
+      valid max: 6
